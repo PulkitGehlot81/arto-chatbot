@@ -4,5 +4,3 @@ tflearn
 tensorflow
 streamlit
 streamlit_theme
-SpeechRecognition
-pyttsx3

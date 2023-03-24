@@ -14,7 +14,6 @@ import streamlit as st
 import streamlit_theme as stt
 import glob
 import shutil
-import speech_recognition as sr
 
 # Open the 'intents.json' file and load its content into a variable called 'data'
 with open("intents.json") as file:
@@ -130,6 +129,23 @@ def word_checker(s):
     return correct_string 
 
 
+def get_response(msg):
+    while True:
+        inp=msg
+        if inp.lower() == "quit"or inp==None:
+            break
+        inp_x = word_checker(inp)
+        results = model.predict([bag_of_words(inp_x, words)])[0]
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
+        if results[results_index] >= 0.9:
+            for tg in data["intents"]:
+                if tg['tag'] == tag:
+                    responses = tg['responses']
+                    ms= random.choice(responses)
+                    return ms
+        else:
+            return " Sorry, I don't know how to answer that yet "
 
 
 def app():
