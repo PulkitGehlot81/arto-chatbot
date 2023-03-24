@@ -15,6 +15,8 @@ import streamlit_theme as stt
 import pyaudio
 import glob
 import shutil
+import speech_recognition as sr
+
 with open("intents.json") as file:
     data = json.load(file)
 try:
@@ -70,6 +72,7 @@ except:
     model = tflearn.DNN(net)
     history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
+
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
     s_words = nltk.word_tokenize(s)
@@ -79,6 +82,7 @@ def bag_of_words(s, words):
             if w == se:
                 bag[i] = 1
     return numpy.array(bag)
+
 def words_to_list(s):
     a = []
     ns = ""
@@ -91,6 +95,7 @@ def words_to_list(s):
             ns = ns + s[i]
     a = list(set(a))
     return a
+
 def json_to_dictionary(data):
     dictionary = []
     fil_dict= []
@@ -105,6 +110,7 @@ def json_to_dictionary(data):
             fil_dict.append(word)
     return list(set(fil_dict))
 chatbot_vocabulary = json_to_dictionary(data)
+
 def word_checker(s):
     correct_string = ""
     for word in s.casefold().split():
@@ -119,7 +125,7 @@ def word_checker(s):
         else:
             correct_string = correct_string + " " + str(word)
     return correct_string 
-import speech_recognition as sr
+
 r=sr.Recognizer()
 import pyttsx3
 engine = pyttsx3.init()
@@ -161,15 +167,21 @@ def get_response(msg):
 
 
 def app():
-    st.set_page_config(page_title="Chatbot", page_icon="asseet\ARTO.png")
-    st.write("Hello, I'm Arto! :wave:")
-
+    st.set_page_config(
+    page_title="Arto Chatbot",
+    page_icon="asseet\ARTO.ico",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help':'https://www.google.com/',
+        'Report a bug': 'https://www.google.com/',
+        'About': "# chatbot app"
+    })
+    
     header_image = 'header_image.png'
-    st.image(header_image, use_column_width=True)
-
-    st.sidebar.title("Menu")
-    menu = ["Home", "About", "Contact"]
-    choice = st.sidebar.selectbox("Select Option", menu)
+    st.image(header_image, width=96)
+    # Set the app's header
+    st.header("Arto Chatbot")
 
 
     # Set the app's background color and font
@@ -263,73 +275,67 @@ def app():
         unsafe_allow_html=True,
     )
 
+    #Create a folder for storing chat history files
+    if not os.path.exists("chat history"):
+        os.makedirs("chat history")
 
-# Set the app's header
-st.header("Arto Chatbot")
+    # Get all chat history files
+    chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
 
-#Create a folder for storing chat history files
-if not os.path.exists("chat history"):
-    os.makedirs("chat history")
+    # Select chat history file
+    selected_file = st.sidebar.selectbox('Select chat history file', chat_history_files)
 
-# Get all chat history files
-chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
-
-# Select chat history file
-selected_file = st.sidebar.selectbox('Select chat history file', chat_history_files)
-
-# Load the selected chat history from a file
-if selected_file:
-    file_path = os.path.join("chat history", selected_file)
-    if os.stat(file_path).st_size == 0:
-        chat_history_list = []
-    else:
-        with open(file_path, "r") as f:
-            chat_history_list = json.load(f)
-else:
-    chat_history_list = []
-
-# Create a placeholder for the chat history
-chat_history = st.empty()
-
-# Create a placeholder for the user input
-user_input = st.text_input("User Input", "")
-
-# Create a button to submit user input
-submit_button = st.button("Send")
-new_chat_button = st.button("New Chat")
-delete_history_button = st.button("Delete All Chat History")
-
-# If new chat button is clicked
-if new_chat_button:
-    # Prompt user to enter file name for chat history and store it in new_file_name variable
-    new_file_name = st.text_input("Enter chat history file name", "")
-    # Create a path for the file with provided name
-    file_path = os.path.join("chat history", new_file_name + ".json")
-
-    # Check if a file with the same name already exists 
-    if os.path.isfile(file_path):
-        # Display error message when file with same name already exists
-        st.error("A file with the same name already exists.")
-    else:
-        try:
-            # Create a new empty chat history file with the given name
-            with open(file_path, "w") as f:
-                json.dump([], f)
-            
-            # Refresh the list of available chat history files
-            chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
-            
-            # Show success message with file path if file was created successfully
-            st.success(f"Chat history file {new_file_name} created successfully at {file_path}!")
-            
-            # Set newly created file as selected file and initialize an empty array to hold chat history
-            selected_file = new_file_name + ".json"
+    # Load the selected chat history from a file
+    if selected_file:
+        file_path = os.path.join("chat history", selected_file)
+        if os.stat(file_path).st_size == 0:
             chat_history_list = []
-        except (IOError, ValueError) as e:
-            # Display error message if an exception is thrown while creating the file
-            st.error(f"Error occurred: {str(e)}")
+        else:
+            with open(file_path, "r") as f:
+                chat_history_list = json.load(f)
+    else:
+        chat_history_list = []
 
+    # Create a placeholder for the chat history
+    chat_history = st.empty()
 
+    # Create a placeholder for the user input
+    user_input = st.text_input("User Input", "")
+
+    # Create a button to submit user input
+    submit_button = st.button("Send")
+    new_chat_button = st.button("New Chat")
+    delete_history_button = st.button("Delete All Chat History")
+
+    # If new chat button is clicked
+    if new_chat_button:
+        # Prompt user to enter file name for chat history and store it in new_file_name variable
+        new_file_name = st.text_input("Enter chat history file name", "")
+        # Create a path for the file with provided name
+        file_path = os.path.join("chat history", new_file_name + ".json")
+
+        # Check if a file with the same name already exists 
+        if os.path.isfile(file_path):
+            # Display error message when file with same name already exists
+            st.error("A file with the same name already exists.")
+        else:
+            try:
+                # Create a new empty chat history file with the given name
+                with open(file_path, "w") as f:
+                    json.dump([], f)
+                
+                # Refresh the list of available chat history files
+                chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+                
+                # Show success message with file path if file was created successfully
+                st.success(f"Chat history file {new_file_name} created successfully at {file_path}!")
+                
+                # Set newly created file as selected file and initialize an empty array to hold chat history
+                selected_file = new_file_name + ".json"
+                chat_history_list = []
+            except (IOError, ValueError) as e:
+                # Display error message if an exception is thrown while creating the file
+                st.error(f"Error occurred: {str(e)}")
     if delete_history_button:
             # Delete all chat history files
             try:
@@ -343,8 +349,6 @@ if new_chat_button:
 
             # Refresh the list of chat history files
             chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
-
-
     if submit_button:
         try:
             # Get user input and add it to chat history list
@@ -388,8 +392,8 @@ if new_chat_button:
         chat_history.markdown(conversation_html, unsafe_allow_html=True)
 
     # About section
-    st.sidebar.markdown("Made by Pulkit") 
-    st.sidebar.markdown("<p style='text-align: center;'>Copyright © 2023 Arto Chatbot. All rights reserved.</p>", unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='text-align: center;'><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>This project was crafted with 🤍 by<br>Pulkit, Manan, Prince and Roshni<br><br></p> ",unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='text-align: center;'>Copyright © 2023 Arto Chatbot. All rights reserved.</p>",unsafe_allow_html=True)
 
 
 # Run the app
