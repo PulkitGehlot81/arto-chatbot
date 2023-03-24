@@ -1,0 +1,16 @@
+nltk
+nltk.stem.lancaster
+time
+difflib
+numpy
+tflearn
+tensorflow
+json
+pickle
+random
+os
+streamlit
+streamlit_theme
+pyaudio
+glob
+shutil
