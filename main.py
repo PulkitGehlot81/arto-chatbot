@@ -129,44 +129,7 @@ def word_checker(s):
             correct_string = correct_string + " " + str(word)
     return correct_string 
 
-r=sr.Recognizer()
-import pyttsx3
-engine = pyttsx3.init()
-def bot_speaking(message):
-    engine.say(message)
-    engine.runAndWait()
-    if engine._inLoop:
-        engine.endLoop()
-def get_input():
-    with sr.Microphone() as source:
-        bot_speaking("Hey mate say something")
-        audio=r.listen(source,timeout=0)
-        bot_speaking("Perfect, Thanks!")
-    try:
-        msg=r.recognize_google(audio)
-        print("TEXT: "+msg); 
-        bot_speaking("you said "+msg)
-        return msg
-    except:
-        bot_speaking("Sorry mate! It's not working")
-        pass;
-def get_response(msg):
-    while True:
-        inp=msg
-        if inp.lower() == "quit"or inp==None:
-            break
-        inp_x = word_checker(inp)
-        results = model.predict([bag_of_words(inp_x, words)])[0]
-        results_index = numpy.argmax(results)
-        tag = labels[results_index]
-        if results[results_index] >= 0.9:
-            for tg in data["intents"]:
-                if tg['tag'] == tag:
-                    responses = tg['responses']
-                    ms= random.choice(responses)
-                    return ms
-        else:
-            return " Sorry, I don't know how to answer that yet "
+
 
 
 def app():
