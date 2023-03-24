@@ -256,7 +256,7 @@ def app():
         """,
         unsafe_allow_html=True,
     )
-
+    st.header("Arto Chatbot")
     #Create a folder for storing chat history files
     if not os.path.exists("chat history"):
         os.makedirs("chat history")
@@ -281,13 +281,18 @@ def app():
     # Create a placeholder for the chat history
     chat_history = st.empty()
 
-    # Create a placeholder for the user input
-    user_input = st.text_input("User Input", "")
 
-    # Create a button to submit user input
-    submit_button = st.button("Send")
+    # Create a placeholder for the user input in the first column
+    user_input =st.text_input("User Input", "")
+
+    # Create a submit button with an icon in the second column
+    submit_button =st.button("Send")
+
     new_chat_button = st.button("New Chat")
-    delete_history_button = st.button("Delete All Chat History")
+    with st.sidebar:
+        delete_history_button = st.button("Delete All Chat History")
+
+
 
     # If new chat button is clicked
     if new_chat_button:
@@ -295,7 +300,6 @@ def app():
         new_file_name = st.text_input("Enter chat history file name", "")
         # Create a path for the file with provided name
         file_path = os.path.join("chat history", new_file_name + ".json")
-
         # Check if a file with the same name already exists 
         if os.path.isfile(file_path):
             # Display error message when file with same name already exists
@@ -315,6 +319,8 @@ def app():
                 # Set newly created file as selected file and initialize an empty array to hold chat history
                 selected_file = new_file_name + ".json"
                 chat_history_list = []
+                # Refresh the list of available chat history files
+                chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
             except (IOError, ValueError) as e:
                 # Display error message if an exception is thrown while creating the file
                 st.error(f"Error occurred: {str(e)}")
@@ -331,6 +337,7 @@ def app():
 
             # Refresh the list of chat history files
             chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+  
     if submit_button:
         try:
             # Get user input and add it to chat history list
@@ -354,6 +361,9 @@ def app():
             # Handle exceptions gracefully by displaying an error message
             error_msg = f"Error occurred: {str(e)}"
             chat_history_list.append(('error', error_msg))
+
+        # Clear user input placeholder
+        user_input = ""
 
         # Display chat history
         conversation_html = "<div class='chat-wrapper'>"
