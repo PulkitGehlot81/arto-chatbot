@@ -1,5 +1,4 @@
 nltk
-nltk.stem.lancaster
 time
 difflib
 numpy
