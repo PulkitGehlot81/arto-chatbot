@@ -203,11 +203,11 @@
         {
             "tag": "Documentation_tools",
             "patterns": [
-                "Microsoft office"
+                "what is the opensource alternative of Microsoft office"
             ],
             "responses": [
-                "Libre office",
-                " OOO"
+                "Libre office"
+                
         ]
         },
         {
