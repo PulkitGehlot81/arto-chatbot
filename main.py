@@ -16,11 +16,15 @@ import glob
 import shutil
 import speech_recognition as sr
 
+# Open the 'intents.json' file and load its content into a variable called 'data'
 with open("intents.json") as file:
     data = json.load(file)
+
 try:
+    # Attempt to open the 'data.pickle' file in binary mode for reading and unpickle its contents into variables
     with open("data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
+
 except:
     words = []
     labels =[]
