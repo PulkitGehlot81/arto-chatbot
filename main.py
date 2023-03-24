@@ -12,7 +12,6 @@ import random
 import os
 import streamlit as st
 import streamlit_theme as stt
-import pyaudio
 import glob
 import shutil
 import speech_recognition as sr
