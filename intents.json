@@ -1,0 +1,965 @@
+{
+    "intents": [
+
+        {
+            "tag": "google",
+            "patterns": [
+                "google",
+                "search",
+                "internet"
+            ],
+            "responses": [
+                "Redirecting to Googleds f asmdnkjs   skjf snfh  hsbf mn sjanfk s akj sad k s s   sha dl skjfhs abdh  sakjhd ku aksjdh  ahskd h dsakduh  askd  askjd k askd k..."
+            ]
+        },
+        {
+            "tag": "greeting",
+            "patterns": [
+                "Hi there",
+                "How are you",
+                "Is anyone there?",
+                "Hey",
+                "Hola",
+                "Hello",
+                "Good day",
+                "Namaste",
+                "yo"
+            ],
+            "responses": [
+                "Hello",
+                "Good to see you again",
+                "Hi there, how can I help?"
+            ],
+            "context": [
+                ""
+            ]
+        },
+        {
+            "tag": "goodbye",
+            "patterns": [
+                "Bye",
+                "See you later",
+                "Goodbye",
+                "Get lost",
+                "Till next time",
+                "bbye"
+            ],
+            "responses": [
+                "See you!",
+                "Have a nice day",
+                "Bye! Come back again soon."
+            ],
+            "context": [
+                ""
+            ]
+        },
+        {
+            "tag": "thanks",
+            "patterns": [
+                "Thanks",
+                "Thank you",
+                "That's helpful",
+                "Awesome, thanks",
+                "Thanks for helping me"
+            ],
+            "responses": [
+                "Happy to help!",
+                "Any time!",
+                "My pleasure"
+            ],
+            "context": [
+                ""
+            ]
+        },
+        {
+            "tag": "no_answer",
+            "patterns": [],
+            "responses": [
+                "Sorry, can't understand you",
+                "Please give me more info",
+                "Not sure I understand"
+            ],
+            "context": [
+                ""
+            ]
+        },
+        {
+            "tag": "options",
+            "patterns": [
+                "How you could help me?",
+                "What you can do?",
+                "What help you provide?",
+                "How you can be helpful?",
+                "What support is offered"
+            ],
+            "responses": [
+                "Arto chatbot can help you in exploring opensource tools. \n For suggestions to help me improve, send an email to suggestions@gmail.com.\n Thank you!! "
+            ],
+            "context": [
+                ""
+            ]
+        },
+
+        {
+            "tag": "Video_Editing",
+            "patterns": [
+                "Adobe premiere pro"
+            ],
+            "responses": [
+                "OpenShot",
+                "Handbrake"
+            ]
+           },
+        {
+            "tag": "3D_modelling",
+            "patterns":[ 
+                "Autodesk Maya"
+            ],
+            "responses":[ 
+                "Blender"
+            ]
+        },
+        {
+            "tag": "Database",
+            "patterns":[ 
+                "Microsoft SQL server",
+                " oracle DB",
+                "IBM DB2"
+            ],
+            "responses": [
+                "MySQL"
+            ]
+        },            
+        {
+            "tag": "Big_data_management",
+            "patterns":[ 
+                "google MapReduce",
+                " google bigtable",
+                "matisse"
+            ],
+            "responses":[
+                 "Hadoop",
+                 " mongoDB",
+                 " couchDB"
+                ]
+        },
+
+        {
+            "tag": "Photo_editing",
+            "patterns": [
+                "Adobe photoshop"]
+
+                ,
+            "responses":[ 
+                "GIMP",
+                " Krita"
+            ]
+        },
+        {
+            "tag": "UI_design_and_prototyping",
+            "patterns": [
+            "Figma",
+            " Adobe XD",
+            " Sketch"
+        ],
+            "responses": [
+                "Pencil",
+                " Quant-UX",
+                " Alva"]
+        },
+        {
+            "tag":"graphic_design",
+            "patterns":[ 
+                "Canva"
+            ],
+            "responses": [
+                "Crello",
+                " Stencil",
+                " FotoJet"
+            ]
+        },
+        {
+            "tag": "CRM",
+            "patterns": [
+                "Tally"
+            ],
+            "responses": [
+                "oddo"
+            ]
+        },
+        {
+            "tag": "Video_player",
+            "patterns": [
+                "Windows media player",
+                " iTunes",
+                " Winamp"
+            ],
+            "responses":[
+                 "VLC",
+                 " Mx "
+                ]
+        },
+
+        {
+            "tag": "Documentation_tools",
+            "patterns": [
+                "Microsoft office"
+            ],
+            "responses": [
+                "Libre office",
+                " OOO"
+        ]
+        },
+        {
+            "tag": "2d_animation",
+            "patterns": [
+                "adobe animate",
+                "adobe character animator",
+                "Tvpaint"
+            ],
+            "responses": [
+                "Ajax animator",
+                " animator pro"
+            ]
+        },
+        {
+            "tag":"mail",
+            "patterns":[
+                 "microsoft outlook"
+                ],
+            "responses": [
+                "thunderbird"
+            ]
+        },
+        {
+            "tag":"indesign",
+            "patterns":[ 
+                "adobe indesign ",
+                " microsoft publisher"
+            ],
+            "responses":[ 
+                "scribus"
+            ]
+        },
+        {
+            "tag":"vector_editing",
+            "patterns":[ 
+                "adobe illustrator"
+            ],
+            "responses": [
+                "inkspace"
+            ]
+        },
+        {
+            "tag": "CAD",
+            "patterns": [
+                "autoCAD"
+            ],
+            "responses": [
+                "FreeCAD",
+                " KiCAD"
+            ]
+        },
+        {
+            "tag": "visio",
+            "patterns": [
+                "Microsoft visio",
+                " smart Draw"
+            ],
+            "responses": [
+                "Dia"
+            ]
+        },
+        {
+            "tag":"logic_pro",
+            "patterns": [
+                "Apple logic pro",
+                " FL studio"
+            ],
+            "responses": [
+                "Audacity"
+            ]
+        },
+        {
+            "tag":"statistics",
+            "patterns": [
+                "splus"
+            ],
+            "responses": [
+                "R"
+            ]
+        },
+        {
+            "tag": "precise arithmatic Mathematics",
+            "patterns": [
+                "Mathematica",
+                "Maple"]
+                ,
+            "responses": [
+                "Maxima",
+                " Sage"
+            ]
+        },
+        {
+            "tag": "server OS",
+            "patterns":[ 
+                "RedHat Enterprise Linux ",
+                " Canonical Ubuntu Server",
+                "  CentOs Linux  Novell ",
+                "SUSE Linux"
+            ],
+            "responses":[ 
+                "Microsoft Windows Server ",
+            " UNIX - Sun Solaris",
+            " IBM AIX",
+            " HP UX"
+        ]
+        },
+        {
+            "tag": "virtualisation",
+            "patterns":[ 
+                "VMWare vSphere", 
+                "ESX Server"
+            ],
+            "responses": [
+                "Linux KVM  Xen"
+            ]
+        },
+        {
+            "tag": "virtualisation",
+            "patterns":[ 
+                "VMWare Workstation",
+                " Parallels for desktop"
+        ],
+            "responses":[ 
+                "virtualbox"
+            ]
+        },
+        {
+            "tag": "remote_desktop",
+            "patterns": [
+                "Citrix ICA"
+            ],
+            "responses":[ 
+                "rddesktop"
+            ]
+        },
+        {
+            "tag": "files_and_storage",
+            "patterns": [
+                "windows file server",
+                " NetApp",
+                " EMC filers"
+            ],
+            "responses":[ 
+                "Freenas ",
+                " openfiler"
+            ]
+        },
+        {
+            "tag": "configuration_management",
+            "patterns":[ 
+                "IBM and CA configuration management tools",
+                " HP OpenView configuration product suite"
+            ],
+            "responses": [
+                "puppet"
+            ]
+        },
+        {
+            "tag": "backup",
+            "patterns":[ 
+                "netvault"
+            ],
+            "responses": [
+                "Amenda",
+                " Bacula"
+            ]
+        },
+        {
+            "tag": "Message_Bus",
+            "patterns":[ 
+                "Oracle and Tibco messaging products",
+                " IBM MQ",
+                " BBEA weblogic"
+            ],
+            "responses": [
+                " RabbitMQ",
+                " JBOSS"
+            ]
+        },
+        {
+            "tag": "enterprise_service_bus",
+            "patterns": [
+                "IBM Websphere ESB",
+                " Oracle",
+                " Tibco ActiveMatrix BusinessWorks"
+            ],
+            "responses": [
+                "JBOSS",
+            " WSO2 carbon",
+            " Mule ESB"
+        ]
+        },
+        {
+            "tag": "job_scheduler",
+            "patterns": [
+                "BMC Control-M",
+                " Cisco Tidal"," IBM Tivoli Workload Scheduler",
+                " CA Autosys"
+            ],
+            "responses":[ 
+                "quarts scheduler"
+            ]
+        },
+        {
+            "tag": "java_application_server",
+            "patterns":[ 
+                "Oracle BEA Weblogic",
+                " ibm websphere"
+            ],
+            "responses":[ 
+                "Sun Oracle Glassfish",
+                " redhat jBoss",
+                " apache tomcat",
+                " Apache geronimo"
+            ]
+        },
+        {
+            "tag": "programming_IDE",
+            "patterns":[ 
+                "Microsoft visual studio"
+            ],
+            "responses":[ 
+                "eclipse",
+                "Kdevelope"
+            ]
+        },
+        {
+            "tag": "web_application_development",
+            "patterns": [
+                "ASP.NET"
+            ],
+            "responses":[
+             "PHP",
+            "Zend framework"
+        ]
+        },
+        {
+            "tag": "code_repository_and_version_control",
+            "patterns": [
+                "Visual Sourcesafe",
+                " Rational Team Concert",
+                " Perforce"
+            ],
+            "responses":[ 
+                "GIT",
+                "subversion"
+            ]
+        },
+        {
+            "tag": "performance_load_testing",
+            "patterns":[
+                 "loadrunner"
+                ],
+            "responses":[ 
+                "jmeter"
+            ]
+        },
+        {
+            "tag": "cloud_infrastructure",
+            "patterns":[ 
+                "Amazon Web Services",
+                " Microsoft Azure",
+                " VMWare",
+                " Citrix"
+            ],
+            "responses": [
+            "openstack",
+            "Eucalyptus",
+            " Ubuntu Enterprise Cloud",
+            " OpenNebula"
+        ]
+        },
+        {
+            "tag": "Email_server",
+            "patterns": [
+                "Microsoft Exchange Server"
+            ],
+            "responses":[ 
+                "Zimbra ",
+                " Zarafa"
+            ]
+        },
+        {
+            "tag": "search_engine",
+            "patterns": [
+                "microsoft FAST",
+                " Exalead"],
+            "responses":[ 
+                " Lucene Solr",
+                " Xapian"
+            ]
+        },
+        {
+            "tag": "Intranet_Portal_and_Collaboration",
+            "patterns":[
+                 "Mircrosoft Sharepoint",
+                 " OpenText Vignette",
+                 " Oracle WebCenter"
+                ],
+            "responses":[
+                 "Alfresco",
+                 " Nuxeo",
+                 " Liferay"
+                ]
+        },
+        {
+            "tag": "Document_and_Content_Management_System(CMS)",
+            "patterns":[ 
+                "Mircrosoft Sharepoint",
+                " Opentext",
+                " Filenet",
+                " Documentum"
+            ],
+            "responses":[ 
+                "Alfresco",
+                " Nuxeo"
+            ]
+        },
+        {
+            "tag": "Record_management_EDRM",
+            "patterns": [
+                "Mircrosoft Sharepoint",
+                "  Documentum",
+                " MERIDIO",
+                " TRIM",
+                " objective"
+            ],
+            "responses":[ 
+                "Alfresco"
+            ]
+        },
+        {
+            "tag": "Workflow_Forms_&_Case_Management",
+            "patterns": [
+                "sharepoint"
+            ],
+            "responses":[ 
+                "Nuxeo",
+                " Foxopen"
+            ]
+        },
+        {
+            "tag": "Enterprise_resource_planning",
+            "patterns":[ 
+                " SAP",
+                " Oracle",
+                " Microsoft Dynamics",
+                " PeopleSoft",
+                " SAGE"
+            ],
+            "responses": [
+                "openERP",
+                " OpenBravo"
+            ]
+        },
+        {
+            "tag": "Customer_Relationship_Management",
+            "patterns":[ 
+                "Microsoft Dynamics",
+                " SageCRM",
+                " Salesforce"
+            ],
+            "responses":[
+                 "SugerCRM"
+                ]
+        },
+        {
+            "tag": "Business_Intelligence",
+            "patterns": [
+                "Oracle",
+                " IBM",
+                " Informatica"
+            ],
+            "responses":[ 
+                "Pentaho BI Suite"
+            ]
+        },
+        {
+            "tag": "data_integration",
+            "patterns": [
+            "IBM",
+            " Oracle",
+            " Software AG",
+            "Tibco",
+            " Progress",
+            " Informatica"
+        ],
+            "responses": [
+                "Talend"
+            ]
+        },
+        {
+            "tag": "Reporting",
+            "patterns": [
+                "Crystal Reports",
+                " Business Objects"
+            ],
+            "responses":[
+                "Jasper Reports",
+            " openReports"
+        ]
+        },
+        {
+            "tag": "Business_Process_Modelling(BPM)",
+            "patterns":[ 
+                "IBM products for BPM"
+            ],
+            "responses": [
+                " Activiti BPM",
+                " intalioBPM",
+                " Process maker"
+            ]
+        },
+        {
+            "tag": "Human_Resources",
+            "patterns":[
+                 "SAP",
+                 " Oracle"
+                ],
+            "responses":[ 
+                "OrangeHRM"
+            ]
+        },
+        {
+            "tag": "network_monitoring",
+            "patterns": [
+                "IBM Tivoli",
+                " HP OpenView",
+                "BMC",
+                " CA",
+                " Orion"
+            ],
+            "responses":[ 
+                "OpenNMS",
+                " zabbic",
+                " zenOSS",
+                "Hyperic HQ",
+                " Groundwork",
+                "opsview"
+            ]
+        },
+        {
+            "tag": "mail_transport",
+            "patterns":[ 
+                "microsoft exchange"
+            ],
+            "responses":[
+                 "Postfix",
+                 " Exim",
+                 "Sendmail"
+                ]
+
+        },
+        {
+            "tag": "certificate_authorities",
+            "patterns": [
+                "Digicert",
+                " Entrust",
+                " GlobalSign",
+                " Thawte",
+                " Verisign"
+            ],
+            "responses":[ 
+                "CA-cert",
+                " openCA"
+            ]
+        },
+        {
+            "tag": "Network_Packet_Capture_and_Protocol_Analyser",
+            "patterns": [
+                "NetWitness",
+                " Capsa"
+            ],
+            "responses":[ 
+                "Wireshark (formerly Ethereal)"
+            ]
+        },
+        {
+            "tag": "Network_Services",
+            "patterns": [
+            "Cisco Integrated Services Routers",
+            " Cisco ASA security appliances"
+            ],
+            "responses": [
+                "vyatta"
+            ]
+        },
+        {
+            "tag": "Telephony_VOIP",
+            "patterns": [
+                "Cisco Unified Communications Manager",
+                "Hardware appliances"
+            ],
+            "responses": [
+                "asterisk"
+            ]
+        },
+        {
+            "tag": "web_server",
+            "patterns": [
+                "microsoft IIS"
+            ],
+            "responses": [
+                "apache web server",
+                "Lighttpd",
+                " nginx",
+                " Cherokee"
+            ]
+        },
+        {
+            "tag":"Web_Cache&Reverse_Proxy",
+            "patterns":[ 
+                "F5 BIG IP",
+                " McAfee Web Gateway",
+                " Zeus",
+                " Blue Coat",
+                " Microsoft Proxy Server"
+            ],
+            "responses":[ 
+                "Squid",
+                " Varnish"
+            ]
+        },
+        {
+            "tag": "Flash_Media_Player",
+            "patterns": [
+                "Adobe Flash Player"
+            ],
+            "responses": [
+                "flowplayer",
+                " Jwflashplayer"
+            ]
+        },
+        {
+            "tag": "Web_Content_Management_System(CMS)",
+            "patterns": [
+                "Morello",
+                " Vignette",
+                "Opentext",
+                " Interwoven",
+                "Autonomy"
+            ],
+            "responses": [
+                "Drupal",
+                " joomla",
+                " plone",
+                "wordpress",
+                " Squiz",
+                "EZ publish"
+            ]
+        },
+        {
+            "tag": "blog_engile",
+            "patterns": [
+                "sss"
+            ],
+            "responses": [
+                "wordpress"
+            ]
+        },
+        {
+            "tag": "wiki",
+            "patterns": [
+                "-"
+            ],
+            "responses": [
+                "mediaWiki"
+            ]
+        },
+        {
+            "tag": "web_analytics",
+            "patterns": [
+                "not available"
+            ],
+            "responses": [
+                "Open Web Analytics (OWA)",
+                " Piwik"
+            ]
+        },
+        {
+            "tag": "Vulnerability_Scanning",
+            "patterns": [
+                "commercial products"
+        ],
+            "responses": [
+                " Nessus",
+                " OpenVAS",
+                " nikto"
+            ]
+        },
+        {
+            "tag": "disc_and_data_encryption",
+            "patterns": [
+                "commercial products"
+            ],
+            "responses": [
+                "Trucrypt ",
+                " SSl"
+            ]
+        },
+        {
+            "tag": "password_strength_testing",
+            "patterns": [
+                "commercial products"
+            ],
+            "responses": ["JohnThe Ripper"
+        ]
+        },
+        {
+            "tag": "intrusion_detection_system",
+            "patterns": [
+                "commercial products"
+            ],
+            "responses": [
+                "Snort"
+            ]
+        },
+        {
+            "tag": "portscanning_and_host",
+            "patterns": [
+                "commercial products"
+            ],
+            "responses": [
+                "nmap"
+            ]
+        },
+        {
+            "tag": "project_management",
+            "patterns": [
+                "microsoft project"
+            ],
+            "responses": [
+                "project.net"
+            ]
+        },
+        {
+            "tag": "pdf_creation",
+            "patterns": [
+                "adobe acrobat"
+        ],
+            "responses": [
+                "PDFcreator"
+            ]
+        },
+        {
+            "tag": "mind_mapping",
+            "patterns": [
+                "MindMaple",
+                " MindManager",
+                " MindGenius",
+                " Visual Mind",
+                "microsoft visio"
+            ],
+            "responses":[
+                 "Freemind",
+                 " Xmind"
+                ]
+        },
+        {
+            "tag": "email_encryption",
+            "patterns": [
+                "Symantec",
+                "PGP Corporation products"
+            ],
+            "responses": [
+                "GnuPG",
+                "GPG"
+            ]
+        },
+        {
+            "tag": "email_labeling",
+            "patterns": [
+                "Bolden James"
+            ],
+            "responses": [
+                "Outlook plugin for email labelling from The National Archives"
+            ]
+        },
+        {
+            "tag": "assistive_technologies",
+            "patterns": [
+                "dragon"
+            ],
+            "responses": [
+                "NonVisual Desktop Access"
+            ]
+        },
+        {
+            "tag": "Audio_Editing",
+            "patterns": ["Wavelab",
+            " Amadeus",
+            " QuickAudio",
+            " Logic Pro",
+            " Wavestudio"
+        ],
+            "responses": [
+                "Audacity"
+            ]
+        },
+        {
+            "tag": "Desktop_publishing",
+            "patterns": [
+                "Adobe InDesign",
+            " Quark"
+        ],
+            "responses": [
+                "scribus"
+            ]
+        },
+        {
+            "tag": "vector_drawing",
+            "patterns": [
+                "adobe illustrator"
+            ],
+            "responses": [
+                "inkspace"
+            ]
+        },
+        {
+            "tag": "diagramming",
+            "patterns": [
+                "Microsoft Visio"
+            ],
+            "responses": [
+                "dia"
+            ]
+        },
+        {
+            "tag": "bug_tracking",
+            "patterns": [
+                "JIRA"
+            ],
+            "responses": [
+                "bugzilla"
+            ]
+        },
+        {
+            "tag": "Operating_system",
+            "patterns": [
+                "mac OS" ,
+                "Windows"
+            ],
+            "responses": [
+                "Linux",
+                " Ubuntu",
+                "Fedora",
+                "Suse "
+            ]
+        }
+
+
+
+    ]
+}
