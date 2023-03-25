@@ -256,7 +256,7 @@ def app():
         """,
         unsafe_allow_html=True,
     )
-    st.header("Arto Chatbot")
+    
     #Create a folder for storing chat history files
     if not os.path.exists("chat history"):
         os.makedirs("chat history")
