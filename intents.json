@@ -28,7 +28,11 @@
             "responses": [
                 "Hello",
                 "Good to see you again",
-                "Hi there, how can I help?"
+                "Hi there, how can I help?",
+                "Hello! How can I help you today?",
+                "Hi there! What can I do for you?",
+                "Hey! How can I assist you?",
+                "Hi! Is there something I can help you with?"
             ],
             "context": [
                 ""
@@ -101,24 +105,108 @@
         },
 
         {
-            "tag": "Video_Editing",
-            "patterns": [
-                "Adobe premiere pro"
-            ],
-            "responses": [
-                "OpenShot",
-                "Handbrake"
-            ]
-           },
+            "tag": "intro",
+            "patterns": ["What is Artificial Intelligence?", "Tell me about AI", "What can AI do?"],
+            "responses": ["Artificial Intelligence refers to the ability of machines to simulate human intelligence and perform tasks that would typically require human intelligence. AI can do things like image recognition, language translation, and predictive analytics."]
+        },
+        
+        {
+            "tag": "machine_learning",
+            "patterns": ["What is machine learning?", "How does machine learning work?", "What are the types of machine learning?"],
+            "responses": ["Machine learning is a type of artificial intelligence that involves training machines to learn from data and improve their performance over time. It works by analyzing large data sets and identifying patterns, which the machine can then use to make predictions or decisions. The main types of machine learning are supervised learning, unsupervised learning, and reinforcement learning."]
+        },
+
+        {
+            "tag": "neural_networks",
+            "patterns": ["What are neural networks?", "How do neural networks work?", "What are the types of neural networks?"],
+            "responses": ["Neural networks are a type of machine learning algorithm inspired by the structure of the human brain. They consist of interconnected nodes that process and transmit information. Neural networks work by adjusting the strength of connections between nodes to improve their performance. The main types of neural networks are feedforward neural networks, convolutional neural networks, and recurrent neural networks."]
+        },
+
+        {
+            "tag": "natural_language_processing",
+            "patterns": ["What is natural language processing?", "How does natural language processing work?", "What are the applications of natural language processing?"],
+            "responses": ["Natural language processing is a branch of AI that deals with the interaction between humans and computers using natural language. It involves tasks such as language translation, sentiment analysis, and speech recognition. Natural language processing works by analyzing and understanding the structure and meaning of human language. Applications of natural language processing include virtual assistants, chatbots, and language translation tools."]
+        },
+
+        {
+            "tag": "computer_vision",
+            "patterns": ["What is computer vision?", "How does computer vision work?", "What are the applications of computer vision?"],
+            "responses": ["Computer vision is a field of AI that involves teaching machines to interpret and understand visual information from the world around them. It works by using algorithms to analyze images and videos and extract information from them. Applications of computer vision include image and video recognition, object detection, and facial recognition."]
+        },
+
+        {
+            "tag": "deep_learning",
+            "patterns": ["What is deep learning?", "How does deep learning work?", "What are the applications of deep learning?"],
+            "responses": ["Deep learning is a type of machine learning that involves the use of deep neural networks to learn from large amounts of data. It works by analyzing and identifying patterns in the data, and then using those patterns to make predictions or decisions. Applications of deep learning include image and speech recognition, natural language processing, and autonomous vehicles."]
+        },
+
+        {
+            "tag": "convolutional_neural_networks",
+            "patterns": ["What are convolutional neural networks?", "How do convolutional neural networks work?", "What are the applications of convolutional neural networks?"],
+            "responses": ["Convolutional neural networks are a type of deep neural network that are particularly well-suited for image recognition tasks. They work by breaking down an image into smaller components, analyzing each component separately, and then combining the results to make a prediction. Applications of convolutional neural networks include image and video recognition, object detection, and autonomous vehicles."]
+        },
+
+        {
+            "tag": "recurrent_neural_networks",
+            "patterns": ["What are recurrent neural networks?", "How do recurrent neural networks work?", "What are the applications of recurrent neural networks?"],
+            "responses": ["Recurrent neural networks are a type of deep neural network that are particularly well-suited for processing sequential data, such as speech or text. They work by using feedback loops to allow information to flow between nodes over time. Applications of recurrent neural networks include natural language processing, speech recognition, and financial forecasting."]
+        },
+
+        {
+            "tag": "ai_types",
+            "patterns": ["What are the different types of AI?", "Can you tell me about AI categories?", "What are the types of AI systems?"],
+            "responses": ["There are mainly three types of AI: rule-based AI, machine learning, and deep learning."]
+        },
+
+        {
+            "tag": "rule_based_ai",
+            "patterns": ["What is rule-based AI?", "How does rule-based AI work?", "What are the applications of rule-based AI?"],
+            "responses": ["Rule-based AI is a type of AI system that uses a set of predefined rules to make decisions or solve problems. It works by using if-then statements to evaluate data and make a decision. Applications of rule-based AI include expert systems, decision support systems, and chatbots."]
+        },
+
+        {
+            "tag": "supervised_learning",
+            "patterns": ["What is supervised learning?", "How does supervised learning work?", "What are the applications of supervised learning?"],
+            "responses": ["Supervised learning is a type of machine learning where the algorithm learns from labeled data, which means that the data is already categorized. It works by comparing the predicted output with the actual output to adjust its parameters. Applications of supervised learning include image recognition, speech recognition, and text classification."]
+        },
+
+        {
+            "tag": "unsupervised_learning",
+            "patterns": ["What is unsupervised learning?", "How does unsupervised learning work?", "What are the applications of unsupervised learning?"],
+            "responses": ["Unsupervised learning is a type of machine learning where the algorithm learns from unlabeled data, which means that the data is not categorized. It works by identifying patterns and relationships in the data without any prior knowledge. Applications of unsupervised learning include clustering, dimensionality reduction, and anomaly detection."]
+        },
+
+        {
+            "tag": "reinforcement_learning",
+            "patterns": ["What is reinforcement learning?", "How does reinforcement learning work?", "What are the applications of reinforcement learning?"],
+            "responses": ["Reinforcement learning is a type of machine learning where the algorithm learns from trial and error through feedback. It works by taking actions in an environment to maximize a reward signal. Applications of reinforcement learning include game playing, robotics, and autonomous vehicles."]
+        },
+
+        {
+            "tag": "video_editing",
+            "patterns": ["What are some open-source tools for video editing?", "Can you recommend any free video editing software?", "What are the best open-source video editing tools?", "Differnet alternative of Adobe premiere pro"],
+            "responses": ["Some popular open-source video editing tools include OpenShot, Shotcut, and Kdenlive."]
+        },
+            
+
+
         {
             "tag": "3D_modelling",
             "patterns":[ 
-                "Autodesk Maya"
+                "Autodesk Maya", "What are some open-source tools for 3d modelling", "Can you recommend any free 3d modelling tools"
             ],
             "responses":[ 
-                "Blender"
+                "Open source alternative of 3d modelling is Blender"
             ]
         },
+
+        {
+            "tag": "blender",
+            "patterns": ["What is Blender?", "How does Blender work?", "What are the features of Blender?"],
+            "responses": ["Blender is a free and open-source 3D creation software that can be used for video editing, animation, and 3D modelling. It offers a wide range of features such as 3D modeling, sculpting, animation, simulation, rendering, and compositing."]
+        },
+        
+
         {
             "tag": "Database",
             "patterns":[ 
@@ -167,6 +255,39 @@
                 " Quant-UX",
                 " Alva"]
         },
+
+        {
+            "tag": "figma",
+            "patterns": ["What is Figma?", "How does Figma work?", "What are the features of Figma?"],
+            "responses": ["Figma is a cloud-based design and prototyping tool that allows teams to collaborate in real-time. It offers a range of features such as vector editing, prototyping, and design collaboration."]
+        },
+
+        {
+            "tag": "vector_editing",
+            "patterns": ["What is vector editing?", "How does vector editing work?", "What are some open-source vector editing tools?"],
+            "responses": ["Vector editing is a type of image editing that uses mathematical equations to create images. Some popular open-source vector editing tools include Inkscape, Gravit Designer, and Vectr."]
+        },
+
+        {
+            "tag": "inkscape",
+            "patterns": ["What is Inkscape?", "How does Inkscape work?", "What are the features of Inkscape?"],
+            "responses": ["Inkscape is a free and open-source vector graphics editor that can be used for creating logos, illustrations, diagrams, and other vector graphics. It offers a range of features such as vector editing, object manipulation, and file import/export."]
+        },
+
+        {
+            "tag": "microsoft_office",
+            "patterns": ["What is Microsoft Office?", "How does Microsoft Office work?", "What are the features of Microsoft Office?"],
+            "responses": ["Microsoft Office is a suite of productivity applications that includes Word, Excel, PowerPoint, and Outlook. It offers a range of features such as word processing, spreadsheet creation, presentation design, and email management."]
+        },
+        
+        
+        
+
+
+        
+
+
+
         {
             "tag":"graphic_design",
             "patterns":[ 
