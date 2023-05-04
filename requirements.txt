@@ -1,6 +1,0 @@
-nltk
-numpy
-tflearn
-tensorflow
-streamlit
-streamlit_theme

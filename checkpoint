@@ -1,2 +1,2 @@
-model_checkpoint_path: "/workspaces/arto-chatbot/model.tflearn"
-all_model_checkpoint_paths: "/workspaces/arto-chatbot/model.tflearn"
+model_checkpoint_path: "C:\\Users\\Asus\\Documents\\GitHub\\arto-chatbot\\model.tflearn"
+all_model_checkpoint_paths: "C:\\Users\\Asus\\Documents\\GitHub\\arto-chatbot\\model.tflearn"
