@@ -1,5 +1,5 @@
 import nltk
-nltk.download('punkt')
+nltk.data.path.append("./nltk_data/")
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 import time
@@ -15,6 +15,8 @@ import streamlit as st
 import streamlit_theme as stt
 import glob
 import shutil
+import requests
+from bs4 import BeautifulSoup
 
 # Open the 'intents.json' file and load its content into a variable called 'data'
 with open("intents.json") as file:
@@ -86,6 +88,30 @@ def bag_of_words(s, words):
                 bag[i] = 1
     return numpy.array(bag)
 
+
+def fetch_google_answer(query):
+    url = f"https://www.google.com/search?q={query}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+    }
+
+    # Send a GET request to the Google search URL with appropriate headers
+    response = requests.get(url, headers=headers)
+
+    # Parse the HTML response using BeautifulSoup
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find the answer element in the HTML
+    answer_element = soup.find('div', class_='BNeawe iBp4i AP7Wnd')
+
+    if answer_element:
+        # Extract the answer text
+        answer = answer_element.get_text()
+        return answer
+    else:
+        # If no answer element found, return None
+        return None
+
 def words_to_list(s):
     a = []
     ns = ""
@@ -132,8 +158,8 @@ def word_checker(s):
 
 def get_response(msg):
     while True:
-        inp=msg
-        if inp.lower() == "quit"or inp==None:
+        inp = msg
+        if inp.lower() == "quit" or inp == None:
             break
         inp_x = word_checker(inp)
         results = model.predict([bag_of_words(inp_x, words)])[0]
@@ -143,11 +169,34 @@ def get_response(msg):
             for tg in data["intents"]:
                 if tg['tag'] == tag:
                     responses = tg['responses']
-                    ms= random.choice(responses)
+                    ms = random.choice(responses)
                     return ms
         else:
-            return " Sorry, I don't know how to answer that yet "
+            answer = fetch_google_answer(inp)
+            if answer:
+                return answer
+            else:
+                return "I'm sorry, I couldn't find an answer for your query."
 
+def test_accuracy(model, test_data, test_labels):
+    total = len(test_data)
+    correct = 0
+
+    for i in range(total):
+        result = model.predict([test_data[i]])[0]
+        predicted_label = labels[numpy.argmax(result)]
+        true_label = labels[numpy.argmax(test_labels[i])]
+
+        if predicted_label == true_label:
+            correct += 1
+
+    accuracy = (correct / total) * 100
+    return accuracy
+
+# Assuming you have test data and labels available in 'test_data' and 'test_labels' respectively
+
+accuracy = test_accuracy(model, test_data, test_labels)
+print("Accuracy: {:.2f}%".format(accuracy))
 
 def app():
     st.set_page_config(
