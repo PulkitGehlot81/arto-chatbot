@@ -63,6 +63,8 @@ except:
     output = numpy.array(output)
     with open("data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output), f)
+
+        
 from tensorflow.python.framework import ops
 ops.reset_default_graph()
 net = tflearn.input_data(shape=[None, len(training[0])])
@@ -178,20 +180,6 @@ def get_response(msg):
             else:
                 return "I'm sorry, I couldn't find an answer for your query."
 
-def test_accuracy(model, test_data, test_labels):
-    total = len(test_data)
-    correct = 0
-
-    for i in range(total):
-        result = model.predict([test_data[i]])[0]
-        predicted_label = labels[numpy.argmax(result)]
-        true_label = labels[numpy.argmax(test_labels[i])]
-
-        if predicted_label == true_label:
-            correct += 1
-
-    accuracy = (correct / total) * 100
-    return accuracy
 
 # Assuming you have test data and labels available in 'test_data' and 'test_labels' respectively
 
