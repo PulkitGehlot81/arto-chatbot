@@ -158,6 +158,7 @@ def word_checker(s):
     return correct_string 
 
 
+
 def get_response(msg):
     while True:
         inp = msg
@@ -181,10 +182,7 @@ def get_response(msg):
                 return "I'm sorry, I couldn't find an answer for your query."
 
 
-# Assuming you have test data and labels available in 'test_data' and 'test_labels' respectively
 
-accuracy = test_accuracy(model, test_data, test_labels)
-print("Accuracy: {:.2f}%".format(accuracy))
 
 def app():
     st.set_page_config(
