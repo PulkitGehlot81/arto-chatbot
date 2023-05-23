@@ -241,23 +241,23 @@ decoder_inputs = tf.keras.Input(shape=(None,))
 
 # Define the embedding layer
 embedding_size = 100
-encoder_embedding = Embedding(inputVocabLen, embedding_size)
-decoder_embedding = Embedding(targetVocabLen, embedding_size)
+encoder_embedding = tf.keras.layers.Embedding(inputVocabLen, embedding_size)
+decoder_embedding = tf.keras.layers.Embedding(targetVocabLen, embedding_size)
 
 # Embed the inputs
 encoder_inputs_embedded = encoder_embedding(encoder_inputs)
 decoder_inputs_embedded = decoder_embedding(decoder_inputs)
 
 # Define the encoder LSTM
-encoder_lstm = tf.keras.LSTM(size, return_state=True)
+encoder_lstm = tf.keras.layers.LSTM(size, return_state=True)
 encoder_outputs, encoder_state_h, encoder_state_c = encoder_lstm(encoder_inputs_embedded)
 
 # Define the decoder LSTM
-decoder_lstm = tf.keras.LSTM(size, return_sequences=True, return_state=True)
+decoder_lstm = tf.keras.layers.LSTM(size, return_sequences=True, return_state=True)
 decoder_outputs, _, _ = decoder_lstm(decoder_inputs_embedded, initial_state=[encoder_state_h, encoder_state_c])
 
 # Define the output layer
-output_projection = tf.keras.Dense(targetVocabLen)
+output_projection = tf.keras.layers.Dense(targetVocabLen)
 
 # Apply the output projection to the decoder outputs
 outputs = output_projection(decoder_outputs)
@@ -266,9 +266,9 @@ outputs = output_projection(decoder_outputs)
 model = Model([encoder_inputs, decoder_inputs], outputs)
 
 # Weighted cross-entropy loss for a sequence of logits
-targets = tf.placeholder(dtype=tf.int32, shape=(None, None))
-target_weights = tf.placeholder(dtype=tf.float32, shape=(None, None))
-loss = tf.reduce_mean(sparse_categorical_crossentropy(targets, outputs) * target_weights)
+targets = tf.keras.Input(dtype=tf.int32, shape=(None, None))
+target_weights = tf.keras.Input(dtype=tf.float32, shape=(None, None))
+loss = tf.reduce_mean(tf.keras.metrics.sparse_categorical_crossentropy(targets, outputs) * target_weights)
 ## Training & Plotting
 # Stub code sourced from Neural machine translator for English2German translation
 # https://github.com/Nemzy/language-translation. Modified to suit requirements.
@@ -282,18 +282,18 @@ steps = 25501
 outputs_proj = [tf.matmul(outputs[i], output_projection[0]) + output_projection[1] for i in range(output_seq_len)]
 
 # training op
-optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(loss)
+optimizer = tf.keras.optimizers.legacy.RMSprop(learning_rate).minimize(loss)
 # tf.train.RMSPropOptimizer
 
 # init op
-init = tf.global_variables_initializer()
+init = tf.Variable()
 
 
 # Loss values appended to plot diagram
 losses = []
 
 # Save checkpoint to restore the model later 
-saver = tf.train.Saver()
+checkpoint = tf.train.Checkpoint()
 
 with tf.Session() as sess:
     sess.run(init)
@@ -307,7 +307,7 @@ with tf.Session() as sess:
             print('step: {}, loss: {}'.format(step, loss_value))
             losses.append(loss_value)
             
-    saver.save(sess, 'checkpoints/', global_step=step)
+    checkpoint.save(sess, 'checkpoints/', global_step=step)
     print('Checkpoint is saved')
     
 # plot the losses
@@ -329,15 +329,15 @@ def generateReply(humanMsg):
         replyMsg = ""
 
         # same format as in model building
-        encoder_inputs = [tf.placeholder(dtype = tf.int32, shape = [None], 
+        encoder_inputs = [tf.keras.Input(dtype = tf.int32, shape = [None], 
                                          name = 'encoder{}'.format(i)) for i in range(input_seq_len)]
         decoder_inputs = [tf.placeholder(dtype = tf.int32, shape = [None], 
                                          name = 'decoder{}'.format(i)) for i in range(output_seq_len)]
 
         # output projection
         size = 512
-        w_t = tf.get_variable('proj_w', [targetVocabLen, size], tf.float32)
-        b = tf.get_variable('proj_b', [targetVocabLen], tf.float32)
+        w_t = tf.Variable('proj_w', [targetVocabLen, size], tf.float32)
+        b = tf.Variable('proj_b', [targetVocabLen], tf.float32)
         w = tf.transpose(w_t)
         output_projection = (w, b)
 
