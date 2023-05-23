@@ -10,6 +10,7 @@ import tensorflow
 import json
 import pickle
 import random
+import numpy as np
 import os
 import streamlit as st
 import streamlit_theme as stt
@@ -17,6 +18,8 @@ import glob
 import shutil
 import requests
 from bs4 import BeautifulSoup
+from tflearn.layers.core import input_data, fully_connected
+from tflearn.layers.recurrent import lstm
 
 # Open the 'intents.json' file and load its content into a variable called 'data'
 with open("intents.json") as file:
@@ -215,6 +218,25 @@ except:
     history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
 
+
+# Reshape the training data
+reshaped_training = np.reshape(training, (-1, len(training[0]), 1))
+
+# Define the network architecture
+lstm_net = tflearn.input_data(shape=[None, len(training[0]), 1])
+lstm_net = tflearn.lstm(lstm_net, 128)
+lstm_net = tflearn.fully_connected(lstm_net[:, -1], len(output[0]), activation="softmax")
+lstm_net = tflearn.regression(lstm_net)
+
+# Create the model
+lstm_model = tflearn.DNN(lstm_net)
+
+# Train the model
+lstm_model.fit(reshaped_training, output, n_epoch=1000, batch_size=8, show_metric=True)
+
+# Save the trained model
+lstm_model.save("lstm_model.tflearn")
+
 # Convert the training and testing data into a list of tuples (pattern, tag)
 train_data = list(zip(train_X, train_y))
 test_data = list(zip(test_X, test_y))
@@ -223,6 +245,9 @@ test_data = list(zip(test_X, test_y))
 accuracy = evaluate_model(model, words, labels, test_data)
 print(f"Accuracy: {accuracy * 100}%")
 
+# Evaluate the LSTM model
+_, lstm_model_accuracy = lstm_model.evaluate(np.expand_dims(training, axis=2), output)
+print(f"LSTM Model Accuracy: {lstm_model_accuracy * 100}%")
 def app():
     st.set_page_config(
     page_title="Arto Chatbot",
