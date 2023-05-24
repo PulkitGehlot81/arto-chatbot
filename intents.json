@@ -1,17 +1,5 @@
 {
     "intents": [
-
-        {
-            "tag": "google",
-            "patterns": [
-                "google",
-                "search",
-                "internet"
-            ],
-            "responses": [
-                "Redirecting to Googleds f asmdnkjs   skjf snfh  hsbf mn sjanfk s akj sad k s s   sha dl skjfhs abdh  sakjhd ku aksjdh  ahskd h dsakduh  askd  askjd k askd k..."
-            ]
-        },
         {
             "tag": "greeting",
             "patterns": [
@@ -19,6 +7,7 @@
                 "How are you",
                 "Is anyone there?",
                 "Hey",
+                "hi",
                 "Hola",
                 "Hello",
                 "Good day",
@@ -45,6 +34,7 @@
                 "See you later",
                 "Goodbye",
                 "Get lost",
+                "quit",
                 "Till next time",
                 "bbye"
             ],
@@ -103,6 +93,267 @@
                 ""
             ]
         },
+
+        {"tag": "computer-science",
+        "patterns": ["What is the roadmap to learn computer science?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning computer science?",
+            "What is the roadmap to master computer science?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance computer science skills?",
+            "What is the roadmap to advance in computer science?"
+        ],
+        "responses": ["https://roadmap.sh/computer-science"]
+        },
+
+        {"tag": " react ",
+        "patterns": ["What is the roadmap to learn react?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning react?",
+            "What is the roadmap to master react?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance react skills?",
+            "What is the roadmap to advance in react?"
+        ],
+        "responses": ["https://roadmap.sh/react"]
+        },
+
+
+        {"tag": " javascript ",
+        "patterns": ["What is the roadmap to learn javascript?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning javascript?",
+            "What is the roadmap to master javascript?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance javascript skills?",
+            "What is the roadmap to advance in javascript?"
+        ],
+        "responses": ["https://roadmap.sh/javascript"]
+        },
+
+        {"tag": " python ",
+        "patterns": ["What is the roadmap to learn Python?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning Python?",
+            "What is the roadmap to master Python?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance Python skills?",
+            "What is the roadmap to advance in Python?"
+        ],
+        "responses": ["https://roadmap.sh/python"]
+        },
+
+        {"tag": " nodejs ",
+        "patterns": ["What is the roadmap to learn nodejs?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning nodejs?",
+            "What is the roadmap to master nodejs?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance nodejs skills?",
+            "What is the roadmap to advance in nodejs?"
+        ],
+        "responses": ["https://roadmap.sh/nodejs"]
+        },
+
+        {"tag": " java ",
+        "patterns": ["What is the roadmap to learn java?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning java?",
+            "What is the roadmap to master java?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance java skills?",
+            "What is the roadmap to advance in java?"
+        ],
+        "responses": ["https://roadmap.sh/java"]
+        },
+
+        {"tag": " mongodb ",
+        "patterns": ["What is the roadmap to learn mongodb?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning mongodb?",
+            "What is the roadmap to master mongodb?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance mongodb skills?",
+            "What is the roadmap to advance in mongodb?"
+        ],
+        "responses": ["https://roadmap.sh/mongodb"]
+        },
+
+
+        {"tag": " prompt-engineering ",
+        "patterns": ["What is the roadmap to learn prompt engineering?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning prompt engineering?",
+            "What is the roadmap to master prompt engineering?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance prompt engineering skills?",
+            "What is the roadmap to advance in prompt engineering?"
+        ],
+        "responses": ["https://roadmap.sh/prompt-engineering"]
+        },
+
+        {"tag": " kubernetes ",
+        "patterns": ["What is the roadmap to learn kubernetes?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning kubernetes?",
+            "What is the roadmap to master kubernetes?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance kubernetes skills?",
+            "What is the roadmap to advance in kubernetes?"
+        ],
+        "responses": ["https://roadmap.sh/kubernetes"]
+        },
+
+
+        {"tag": " docker ",
+        "patterns": ["What is the roadmap to learn docker?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning docker?",
+            "What is the roadmap to master docker?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance docker skills?",
+            "What is the roadmap to advance in docker?"
+        ],
+        "responses": ["https://roadmap.sh/docker"]
+        },
+
+        {"tag": " system-design ",
+        "patterns": ["What is the roadmap to learn system design?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning system design?",
+            "What is the roadmap to master system design?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance system design skills?",
+            "What is the roadmap to advance in system design?"
+        ],
+        "responses": ["https://roadmap.sh/system-design"]},
+
+
+        {"tag": " vue ",
+        "patterns": ["What is the roadmap to learn vue?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning vue?",
+            "What is the roadmap to master vue?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance vue skills?",
+            "What is the roadmap to advance in vue?"
+        ],
+        "responses": ["https://roadmap.sh/vue"]
+        },
+
+
+        {"tag": " aws ",
+        "patterns": ["What is the roadmap to learn aws?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning aws?",
+            "What is the roadmap to master aws?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance aws skills?",
+            "What is the roadmap to advance in aws?"
+        ],
+        "responses": ["https://roadmap.sh/best-practices/aws"]},
+
+
+        {"tag": " Golang ",
+        "patterns": ["What is the roadmap to learn Golang?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning Golang?",
+            "What is the roadmap to master Golang?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance Golang skills?",
+            "What is the roadmap to advance in Golang?"
+        ],
+        "responses": ["https://roadmap.sh/golang"]},
+
+
+        {"tag": " frontend-development",
+        "patterns": ["What is the roadmap to learn frontend development?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning frontend development?",
+            "What is the roadmap to master frontend development?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance frontend development skills?",
+            "What is the roadmap to advance in frontend development?"
+        ],
+        "responses": ["https://roadmap.sh/frontend"]},
+
+
+        {"tag": " backend-development ",
+        "patterns": ["What is the roadmap to learn backend development?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning backend development?",
+            "What is the roadmap to master backend development?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance backend development skills?",
+            "What is the roadmap to advance in backend development?"
+        ],
+        "responses": ["https://roadmap.sh/backend"]},
+            
+
+        {"tag": " DevOps ",
+        "patterns": ["What is the roadmap to learn DevOps?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning DevOps?",
+            "What is the roadmap to master DevOps?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance DevOps skills?",
+            "What is the roadmap to advance in DevOps?"
+        ],
+        "responses": ["https://roadmap.sh/devops"]},
+
+
+        {"tag": " full-stack-development ",
+        "patterns": ["What is the roadmap to learn full stack development?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning full stack development?",
+            "What is the roadmap to master full stack development?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance full stack development skills?",
+            "What is the roadmap to advance in full stack development?"
+        ],
+        "responses": ["https://roadmap.sh/full-stack"]},
+
+
+        {"tag": " android-developer ",
+        "patterns": ["What is the roadmap to learn android?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning android?",
+            "What is the roadmap to master android?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance android skills?",
+            "What is the roadmap to advance in android?"
+        ],
+        "responses": ["https://roadmap.sh/android"]},
+
+
+        {"tag": " PostgreSQL ",
+        "patterns": ["What is the roadmap to learn PostgreSQL?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning PostgreSQL?",
+            "What is the roadmap to master PostgreSQL?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance PostgreSQL skills?",
+            "What is the roadmap to advance in PostgreSQL?"
+        ],
+        "responses": ["https://roadmap.sh/postgresql-dba"]},
+
+        {"tag": " blockchain ",
+        "patterns": ["What is the roadmap to learn blockchain?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning blockchain?",
+            "What is the roadmap to master blockchain?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance blockchain skills?",
+            "What is the roadmap to advance in blockchain?"
+        ],
+        "responses": ["https://roadmap.sh/blockchain"]},
+
+
+        {"tag": "QA-engineer",
+        "patterns": ["What is the roadmap to learn QA?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning QA?",
+            "What is the roadmap to master QA?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance QA skills?",
+            "What is the roadmap to advance in QA?"
+        ],
+        "responses": ["https://roadmap.sh/qa"]},
+
+
+        {"tag": " flutter ",
+        "patterns": ["What is the roadmap to learn flutter?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning flutter?",
+            "What is the roadmap to master flutter?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance flutter skills?",
+            "What is the roadmap to advance in flutter?"
+        ],
+        "responses": ["https://roadmap.sh/flutter"]},
+
+        {"tag": " ux-designing ",
+        "patterns": ["What is the roadmap to learn ux designing?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning ux designing?",
+            "What is the roadmap to master ux designing?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance ux designing skills?",
+            "What is the roadmap to advance in ux designing?"
+        ],
+        "responses": ["https://roadmap.sh/ux-design"]},
+
+
+        {"tag": " cyber-security ",
+        "patterns": ["What is the roadmap to learn cyber-security?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning cyber security?",
+            "What is the roadmap to master cyber security?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance cyber security skills?",
+            "What is the roadmap to advance in cyber security?"],
+        "responses": ["https://roadmap.sh/cyber-security"]},
+
+        {"tag": " asp.net-core ",
+        "patterns": ["What is the roadmap to learn asp.net?",
+            "Can you provide a roadmap with recommended resources and tutorials to start learning asp.net?",
+            "What is the roadmap to master asp.net?",
+            "Could you share a roadmap with suggested projects and coding exercises to enhance asp.net skills?",
+            "What is the roadmap to advance in asp.net?"
+        ],
+        "responses": ["https://roadmap.sh/aspnet-core"]},
+
+
 
         {
             "tag": "intro",
@@ -279,14 +530,6 @@
             "patterns": ["What is Microsoft Office?", "How does Microsoft Office work?", "What are the features of Microsoft Office?"],
             "responses": ["Microsoft Office is a suite of productivity applications that includes Word, Excel, PowerPoint, and Outlook. It offers a range of features such as word processing, spreadsheet creation, presentation design, and email management."]
         },
-        
-        
-        
-
-
-        
-
-
 
         {
             "tag":"graphic_design",

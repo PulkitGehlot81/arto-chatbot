@@ -1,124 +1,401 @@
-import numpy as np
-import json
 import nltk
-from nltk.stem import WordNetLemmatizer
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, LSTM, Embedding
-from tensorflow.keras.optimizers import Adam
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-from sklearn.feature_extraction.text import TfidfVectorizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.callbacks import EarlyStopping
+from nltk.stem.lancaster import LancasterStemmer
+stemmer = LancasterStemmer()
+import time
+import difflib
+import numpy
+import tflearn
+import tensorflow
+import json
+import pickle
+import random
+import os
+import streamlit as st
+import streamlit_theme as stt
+import pyaudio
+import glob
+import shutil
+import speech_recognition as sr
 
-# Load intents from JSON
-with open('intents.json') as file:
+with open("intents.json") as file:
     data = json.load(file)
+try:
+    with open("data.pickle", "rb") as f:
+        words, labels, training, output = pickle.load(f)
+except:
+    words = []
+    labels =[]
+    docs_patt = []
+    docs_tag = []
+    for intent in data["intents"]:
+        for pattern in intent["patterns"]:
+            wrds = nltk.word_tokenize(pattern)
+            for item in wrds:
+                words.extend(wrds)
+                docs_patt.append(wrds)
+                docs_tag.append(intent["tag"])
+                if intent["tag"] not in labels:
+                    labels.append(intent["tag"])
+    words = [stemmer.stem(w.lower()) for w in words]
+    words = sorted(list(set(words)))
+    labels = sorted(labels)
+    training = []
+    output = []
+    out_empty = [0 for _ in range(len(labels))]
+    for x, doc in enumerate(docs_patt):
+        bag = []
+        wrds = [stemmer.stem(w.lower()) for w in doc]
+        for w in words:
+            if w in wrds:
+                bag.append(1)
+            else:
+                bag.append(0)
+        output_row = out_empty[:]
+        output_row[labels.index(docs_tag[x])] = 1
+        training.append(bag)
+        output.append(output_row)
+    training = numpy.array(training)
+    output = numpy.array(output)
+    with open("data.pickle", "wb") as f:
+        pickle.dump((words, labels, training, output), f)
+from tensorflow.python.framework import ops
+ops.reset_default_graph()
+net = tflearn.input_data(shape=[None, len(training[0])])
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, 8)
+net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
+net = tflearn.regression(net)
+model = tflearn.DNN(net)
+try:
+    model.load("model.tflearn")
+except:
+    model = tflearn.DNN(net)
+    history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+    model.save("model.tflearn")
 
-# Tokenization and Lemmatization
-lemmatizer = WordNetLemmatizer()
-words = []
-labels = []
-documents = []
-ignore_words = ['?', '!']
+def bag_of_words(s, words):
+    bag = [0 for _ in range(len(words))]
+    s_words = nltk.word_tokenize(s)
+    s_words = [stemmer.stem(word.lower()) for word in s_words]
+    for se in s_words:
+        for i, w in enumerate(words):
+            if w == se:
+                bag[i] = 1
+    return numpy.array(bag)
 
-for intent in data['intents']:
-    for pattern in intent['patterns']:
-        # Tokenize each word
-        word_list = nltk.word_tokenize(pattern)
-        words.extend(word_list)
-        documents.append((word_list, intent['tag']))
-        if intent['tag'] not in labels:
-            labels.append(intent['tag'])
+def words_to_list(s):
+    a = []
+    ns = ""
+    s = s + " " 
+    for i in range(len(s)):
+        if s[i] == " ":
+            a.append(ns)
+            ns = ""
+        else:
+            ns = ns + s[i]
+    a = list(set(a))
+    return a
 
-# Lemmatize words and remove duplicates
-words = [lemmatizer.lemmatize(word.lower()) for word in words if word not in ignore_words]
-words = sorted(list(set(words)))
+def json_to_dictionary(data):
+    dictionary = []
+    fil_dict= []
+    vocalubary = []
+    for i in data["intents"]:
+        for pattern in i["patterns"]:
+            vocalubary.append(pattern.lower())
+    for i in vocalubary:
+        dictionary.append(words_to_list(i))
+    for i in range(len(dictionary)):
+        for word in dictionary[i]:
+            fil_dict.append(word)
+    return list(set(fil_dict))
+chatbot_vocabulary = json_to_dictionary(data)
 
-# Create training data
-training = []
-output = []
-output_empty = [0] * len(labels)
+def word_checker(s):
+    correct_string = ""
+    for word in s.casefold().split():
+        if word not in chatbot_vocabulary:
+            suggestion = difflib.get_close_matches(word, chatbot_vocabulary)
+            for x in suggestion:
+                pass
+            if len(suggestion) == 0:
+                pass
+            else:
+                correct_string = correct_string + " " + str(suggestion[0])
+        else:
+            correct_string = correct_string + " " + str(word)
+    return correct_string 
 
-for doc in documents:
-    bag = []
-    word_patterns = doc[0]
-    word_patterns = [lemmatizer.lemmatize(word.lower()) for word in word_patterns]
-    for word in words:
-        bag.append(1) if word in word_patterns else bag.append(0)
-    output_row = list(output_empty)
-    output_row[labels.index(doc[1])] = 1
-    training.append([bag, output_row])
+r=sr.Recognizer()
+import pyttsx3
+engine = pyttsx3.init()
+def bot_speaking(message):
+    engine.say(message)
+    engine.runAndWait()
+    if engine._inLoop:
+        engine.endLoop()
+def get_input():
+    with sr.Microphone() as source:
+        bot_speaking("Hey mate say something")
+        audio=r.listen(source,timeout=0)
+        bot_speaking("Perfect, Thanks!")
+    try:
+        msg=r.recognize_google(audio)
+        print("TEXT: "+msg); 
+        bot_speaking("you said "+msg)
+        return msg
+    except:
+        bot_speaking("Sorry mate! It's not working")
+        pass;
+def get_response(msg):
+    while True:
+        inp=msg
+        if inp.lower() == "quit"or inp==None:
+            break
+        inp_x = word_checker(inp)
+        results = model.predict([bag_of_words(inp_x, words)])[0]
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
+        if results[results_index] >= 0.9:
+            for tg in data["intents"]:
+                if tg['tag'] == tag:
+                    responses = tg['responses']
+                    ms= random.choice(responses)
+                    return ms
+        else:
+            return " Sorry, I don't know how to answer that yet "
 
-# Shuffle and convert to numpy arrays
-np.random.shuffle(training)
-training = np.array(training)
 
-train_x = list(training[:, 0])
-train_y = list(training[:, 1])
+def app():
+    st.set_page_config(
+    page_title="Arto Chatbot",
+    page_icon="asseet\ARTO.ico",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help':'https://www.google.com/',
+        'Report a bug': 'https://www.google.com/',
+        'About': "# chatbot app"
+    })
+    
+    header_image = 'header_image.png'
+    st.image(header_image, width=96)
+    # Set the app's header
+    st.header("Arto Chatbot")
 
-# Convert train_y to a list of tuples
-train_y = np.argmax(train_y, axis=1)
 
-# Handle missing labels
-missing_labels = set(labels) - set(train_y)
-for missing_label in missing_labels:
-    output_row = list(output_empty)
-    output_row[labels.index(missing_label)] = 1
-    training = np.concatenate((training, [[[0] * len(words), output_row]]))
+    # Set the app's background color and font
+    st.markdown(
+        """
+        <style>
+            body {
+                
+                font-family: sans-serif;
+            }
+            
+            .chat-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
 
-# Shuffle the updated training data
-np.random.shuffle(training)
-train_x = list(training[:, 0])
-train_y = list(training[:, 1])
+            .loader {
+            border: 16px solid #f3f3f3; 
+            border-top: 16px solid #3498db; 
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            }
+            
+            @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+            }
 
-# Split the training data into train and test
-train_x, test_x, train_y, test_y = train_test_split(train_x, train_y, test_size=0.3)
+            .chat-bubble {
+            background-color: #f1f1f1;
+            border-radius: 18px;
+            padding: 10px;
+            margin: 10px 0;
+            position: relative;
+            max-width: 60%;
+            height: auto;
+            }
+            
+            .chat-bubble::after {
+            content: "";
+            clear: both;
+            display: table;
+            }
+            
+            .user-bubble {
+            background-color: #2196F3;
+            color: white;
+            align-self:flex-end;
+            margin-left: 60%;
 
-# Create a dictionary to store the models
-models = {
-    "Neural Network": Sequential([
-        Dense(128, input_shape=(len(train_x[0]),), activation='relu'),
-        Dropout(0.5),
-        Dense(64, activation='relu'),
-        Dropout(0.5),
-        Dense(len(labels), activation='softmax')
-    ]),
+            }
+            
+            .user-bubble::after {
+            content: "";
+            position: absolute;
+            bottom: 12px;
+            right: -15px;
+            border-style: solid;
+            border-width: 15px 0 15px 20px;
+            border-color: transparent transparent transparent #2196F3;
+            }
 
-    "LSTM": Sequential([
-        Embedding(len(words), 128, input_length=len(train_x[0])),
-        LSTM(128),
-        Dense(len(labels), activation='softmax')
-    ])
-}
+            .chat-bubble.chat-bot {
+            background-color: #e9e9eb;
+            color: black;
+            align-self:flex-end;
+            margin-right: 60%;
 
-# Train the models
-for model_name, model in models.items():
-    print(f"Training {model_name}...")
-    if model_name == "Neural Network":
-        model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001), metrics=['accuracy'])
-        early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-        model.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=16, verbose=1, validation_split=0.1, callbacks=[early_stopping])
+            }
+            
+            .chat-bubble.chat-bot::after {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: -15px;
+            border-style: solid;
+            border-width: 15px 20px 15px 0;
+            border-color: transparent #e9e9eb transparent transparent;
+            }
+            
 
-    elif model_name == "LSTM":
-        tokenizer = Tokenizer(num_words=len(words))
-        tokenizer.fit_on_texts([str(x) for x in train_x])  # Convert train_x to strings
-        train_sequences = tokenizer.texts_to_sequences([str(x) for x in train_x])  # Convert train_x to strings
-        train_sequences_padded = pad_sequences(train_sequences, maxlen=len(train_x[0]), padding='post')
-        model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001), metrics=['accuracy'])
-        early_stopping = EarlyStopping(monitor='val_loss', patience=10)
-        model.fit(np.array(train_sequences_padded), np.array(train_y), epochs=200, batch_size=16, verbose=1, validation_split=0.1, callbacks=[early_stopping])
+            
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
-# Evaluate the models
-for model_name, model in models.items():
-    print(f"\n{model_name} Evaluation:")
-    if model_name == "Neural Network" or model_name == "LSTM":
-        if model_name == "Neural Network":
-            _, acc = model.evaluate(np.array(test_x), np.array(test_y), verbose=0)
-        elif model_name == "LSTM":
-            test_sequences = tokenizer.texts_to_sequences([str(x) for x in test_x])  # Convert test_x to strings
-            test_sequences_padded = pad_sequences(test_sequences, maxlen=len(train_x[0]), padding='post')
-            _, acc = model.evaluate(np.array(test_sequences_padded), np.array(test_y), verbose=0)
-        print("Accuracy:", acc)
+    #Create a folder for storing chat history files
+    if not os.path.exists("chat history"):
+        os.makedirs("chat history")
+
+    # Get all chat history files
+    chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+
+    # Select chat history file
+    selected_file = st.sidebar.selectbox('Select chat history file', chat_history_files)
+
+    # Load the selected chat history from a file
+    if selected_file:
+        file_path = os.path.join("chat history", selected_file)
+        if os.stat(file_path).st_size == 0:
+            chat_history_list = []
+        else:
+            with open(file_path, "r") as f:
+                chat_history_list = json.load(f)
+    else:
+        chat_history_list = []
+
+    # Create a placeholder for the chat history
+    chat_history = st.empty()
+
+    # Create a placeholder for the user input
+    user_input = st.text_input("User Input", "")
+
+    # Create a button to submit user input
+    submit_button = st.button("Send")
+    new_chat_button = st.button("New Chat")
+    delete_history_button = st.button("Delete All Chat History")
+
+    # If new chat button is clicked
+    if new_chat_button:
+        # Prompt user to enter file name for chat history and store it in new_file_name variable
+        new_file_name = st.text_input("Enter chat history file name", "")
+        # Create a path for the file with provided name
+        file_path = os.path.join("chat history", new_file_name + ".json")
+
+        # Check if a file with the same name already exists 
+        if os.path.isfile(file_path):
+            # Display error message when file with same name already exists
+            st.error("A file with the same name already exists.")
+        else:
+            try:
+                # Create a new empty chat history file with the given name
+                with open(file_path, "w") as f:
+                    json.dump([], f)
+                
+                # Refresh the list of available chat history files
+                chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+                
+                # Show success message with file path if file was created successfully
+                st.success(f"Chat history file {new_file_name} created successfully at {file_path}!")
+                
+                # Set newly created file as selected file and initialize an empty array to hold chat history
+                selected_file = new_file_name + ".json"
+                chat_history_list = []
+            except (IOError, ValueError) as e:
+                # Display error message if an exception is thrown while creating the file
+                st.error(f"Error occurred: {str(e)}")
+    if delete_history_button:
+            # Delete all chat history files
+            try:
+                shutil.rmtree("chat history")
+                os.makedirs("chat history")
+                st.success("All chat history files deleted successfully!")
+                # Refresh the list of chat history files
+                chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+            except (OSError, IOError) as e:
+                st.error(f"Error occurred while deleting chat history files: {str(e)}")
+
+            # Refresh the list of chat history files
+            chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+    if submit_button:
+        try:
+            # Get user input and add it to chat history list
+            user_message = user_input.strip()
+            chat_history_list.append(('user', user_message))
+
+            # Send user input to chatbot for processing
+            chatbot_output = get_response(user_message)
+
+            # Add chatbot response to chat history
+            chat_history_list.append(('chatbot', chatbot_output))
+
+            # Clear user input
+            user_input = ""
+
+            # Save the updated chat history to the selected file
+            with open(os.path.join("chat history", selected_file), "w") as f:
+                json.dump(chat_history_list, f)
+
+        except Exception as e:
+            # Handle exceptions gracefully by displaying an error message
+            error_msg = f"Error occurred: {str(e)}"
+            chat_history_list.append(('error', error_msg))
+
+        # Display chat history
+        conversation_html = "<div class='chat-wrapper'>"
+        for msg_type, msg_text in reversed(chat_history_list):
+            if msg_type == 'user':
+                # Display the user's input in the chat history, aligned to the right
+                user_bubble = f"<div class='chat-bubble user-bubble align-right'>{msg_text}</div><br>"
+                conversation_html = user_bubble + conversation_html
+            elif msg_type == 'chatbot':
+                # Display chatbot's response in chat history, aligned to the left
+                bot_bubble = f"<div class='chat-bubble chat-bot align-left'>{msg_text}</div><br>"
+                conversation_html = bot_bubble + conversation_html
+            elif msg_type == 'error':
+                # Display error message in chat history, aligned to the right
+                error_bubble = f"<div class='chat-bubble error-bubble align-right'>{msg_text}</div><br>"
+                conversation_html = error_bubble + conversation_html
+            conversation_html += "</div>"
+        chat_history.markdown(conversation_html, unsafe_allow_html=True)
+
+    # About section
+    st.sidebar.markdown("<p style='text-align: center;'><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>This project was crafted with 🤍 by<br>Pulkit, Manan, Prince and Roshni<br><br></p> ",unsafe_allow_html=True)
+    st.sidebar.markdown("<p style='text-align: center;'>Copyright © 2023 Arto Chatbot. All rights reserved.</p>",unsafe_allow_html=True)
+
+
+# Run the app
+if __name__ == "__main__":
+    app()

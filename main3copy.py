@@ -1,5 +1,4 @@
 import nltk
-nltk.data.path.append("./nltk_data/")
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 import time
@@ -10,26 +9,22 @@ import tensorflow
 import json
 import pickle
 import random
-import numpy as np
 import os
 import streamlit as st
 import streamlit_theme as stt
+import pyaudio
 import glob
 import shutil
-import requests
-from bs4 import BeautifulSoup
-from tflearn.layers.core import input_data, fully_connected
-from tflearn.layers.recurrent import lstm
+import speech_recognition as sr
+from helpers import is_computer_science_related
 
-# Open the 'intents.json' file and load its content into a variable called 'data'
+
+
 with open("intents.json") as file:
     data = json.load(file)
-
 try:
-    # Attempt to open the 'data.pickle' file in binary mode for reading and unpickle its contents into variables
     with open("data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
-
 except:
     words = []
     labels =[]
@@ -66,8 +61,6 @@ except:
     output = numpy.array(output)
     with open("data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output), f)
-
-        
 from tensorflow.python.framework import ops
 ops.reset_default_graph()
 net = tflearn.input_data(shape=[None, len(training[0])])
@@ -76,6 +69,12 @@ net = tflearn.fully_connected(net, 8)
 net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
 net = tflearn.regression(net)
 model = tflearn.DNN(net)
+try:
+    model.load("model.tflearn")
+except:
+    model = tflearn.DNN(net)
+    history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+    model.save("model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
@@ -86,30 +85,6 @@ def bag_of_words(s, words):
             if w == se:
                 bag[i] = 1
     return numpy.array(bag)
-
-
-def fetch_google_answer(query):
-    url = f"https://www.google.com/search?q={query}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-    }
-
-    # Send a GET request to the Google search URL with appropriate headers
-    response = requests.get(url, headers=headers)
-
-    # Parse the HTML response using BeautifulSoup
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # Find the answer element in the HTML
-    answer_element = soup.find('div', class_='BNeawe iBp4i AP7Wnd')
-
-    if answer_element:
-        # Extract the answer text
-        answer = answer_element.get_text()
-        return answer
-    else:
-        # If no answer element found, return None
-        return None
 
 def words_to_list(s):
     a = []
@@ -154,101 +129,73 @@ def word_checker(s):
             correct_string = correct_string + " " + str(word)
     return correct_string 
 
+r=sr.Recognizer()
+import pyttsx3
+engine = pyttsx3.init()
+def bot_speaking(message):
+    engine.say(message)
+    engine.runAndWait()
+    if engine._inLoop:
+        engine.endLoop()
+def get_input():
+    with sr.Microphone() as source:
+        bot_speaking("Hey mate say something")
+        audio=r.listen(source,timeout=0)
+        bot_speaking("Perfect, Thanks!")
+    try:
+        msg=r.recognize_google(audio)
+        print("TEXT: "+msg); 
+        bot_speaking("you said "+msg)
+        return msg
+    except:
+        bot_speaking("Sorry mate! It's not working")
+        pass;
+
+
+
+import openai
+openai.api_key = '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'
 
 def get_response(msg):
     while True:
         inp = msg
-        if inp.lower() == "quit" or inp == None:
+        
+        if inp.lower() == "quit" or inp is None:
             break
         inp_x = word_checker(inp)
         results = model.predict([bag_of_words(inp_x, words)])[0]
         results_index = numpy.argmax(results)
         tag = labels[results_index]
         if results[results_index] >= 0.9:
-            for tg in data["intents"]:
-                if tg['tag'] == tag:
-                    responses = tg['responses']
-                    ms = random.choice(responses)
-                    return ms
-        else:
-            answer = fetch_google_answer(inp)
-            if answer:
-                return answer
+            if tag == "roadmap":
+                # Generate a response about roadmap
+                return "Here is the roadmap for your learning path: [Insert roadmap here]"
+            elif tag == "open_source_tools":
+                # Generate a response about open source tools
+                return "Here are some popular open source tools: [Insert list of open source tools here]"
             else:
-                return "I'm sorry, I couldn't find an answer for your query."
-
-
-def evaluate_model(model, words, labels, test_data):
-    correct = 0
-    total = len(test_data)
-    for pattern, tag in test_data:
-        input_data = bag_of_words(pattern, words)
-        predicted = numpy.argmax(model.predict([input_data]))
-        if labels[predicted] == tag:
-            correct += 1
-    accuracy = correct / total
-    return accuracy
-
-
-# Split the data into training and testing sets
-from sklearn.model_selection import train_test_split
-train_data, test_data = train_test_split(data["intents"], test_size=0.2, random_state=42)
-
-# Preprocess the training and testing data
-train_X = []
-train_y = []
-for intent in train_data:
-    for pattern in intent["patterns"]:
-        train_X.append(pattern)
-        train_y.append(intent["tag"])
-
-test_X = []
-test_y = []
-for intent in test_data:
-    for pattern in intent["patterns"]:
-        test_X.append(pattern)
-        test_y.append(intent["tag"])
-
-
-# Train a new model with the training data
-try:
-    model.load("model.tflearn")
-except:
-    model = tflearn.DNN(net)
-    history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-    model.save("model.tflearn")
-
-'''
-# Reshape the training data
-reshaped_training = np.reshape(training, (-1, len(training[0]), 1))
-# Define the network architecture
-lstm_net = tflearn.input_data(shape=[None, len(training[0]), 1])
-lstm_net = tflearn.lstm(lstm_net, 128)
-lstm_net = tflearn.fully_connected(lstm_net[:, -1], len(output[0]), activation="softmax")
-lstm_net = tflearn.regression(lstm_net)
-# Create the model
-lstm_model = tflearn.DNN(lstm_net)
-# Train the model
-lstm_model.fit(reshaped_training, output, n_epoch=1000, batch_size=8, show_metric=True)
-# Save the trained model
-lstm_model.save("lstm_model.tflearn")
-'''
-
-
-# Convert the training and testing data into a list of tuples (pattern, tag)
-train_data = list(zip(train_X, train_y))
-test_data = list(zip(test_X, test_y))
-
-# Evaluate the model using the testing data
-accuracy = evaluate_model(model, words, labels, test_data)
-print(f"Accuracy: {accuracy * 100}%")
-
-'''
-# Evaluate the LSTM model
-_, lstm_model_accuracy = lstm_model.evaluate(np.expand_dims(training, axis=2), output)
-print(f"LSTM Model Accuracy: {lstm_model_accuracy * 100}%")
-'''
-
+                for tg in data["intents"]:
+                    if tg['tag'] == tag:
+                        responses = tg['responses']
+                        ms = random.choice(responses)
+                        return ms
+        else:
+            is_computer_science_query = is_computer_science_related(msg)
+            if is_computer_science_query:
+                # Generate a chatbot response based on the user's message and computer science context
+                context = "You are a student interested in computer science. You ask: " + msg
+                response = openai.Completion.create(
+                    engine='text-davinci-003',
+                    prompt=context,
+                    max_tokens=1000,
+                    temperature=0.7,
+                    n=1,
+                    stop=None
+                )
+                return response.choices[0].text.strip()
+            else:
+                return "Arto chatbot has been programmed to respond to queries related to the field of computer science only."
+    
 def app():
     st.set_page_config(
     page_title="Arto Chatbot",
@@ -260,7 +207,7 @@ def app():
         'Report a bug': 'https://www.google.com/',
         'About': "# chatbot app"
     })
-
+    
     header_image = 'header_image.png'
     st.image(header_image, width=96)
     # Set the app's header
@@ -357,7 +304,7 @@ def app():
         """,
         unsafe_allow_html=True,
     )
-    
+
     #Create a folder for storing chat history files
     if not os.path.exists("chat history"):
         os.makedirs("chat history")
@@ -382,25 +329,21 @@ def app():
     # Create a placeholder for the chat history
     chat_history = st.empty()
 
+    # Create a placeholder for the user input
+    user_input = st.text_input("User Input", "")
 
-    # Create a placeholder for the user input in the first column
-    user_input =st.text_input("User Input", "")
-
-    # Create a submit button with an icon in the second column
-    submit_button =st.button("Send")
-
+    # Create a button to submit user input
+    submit_button = st.button("Send")
     new_chat_button = st.button("New Chat")
-    with st.sidebar:
-        delete_history_button = st.button("Delete All Chat History")
-
-
+    delete_history_button = st.button("Delete All Chat History")
 
     # If new chat button is clicked
     if new_chat_button:
         # Prompt user to enter file name for chat history and store it in new_file_name variable
-        new_file_name = st.text_input("Enter chat history file name", "") or "default"
+        new_file_name = st.text_input("Enter chat history file name", "")
         # Create a path for the file with provided name
         file_path = os.path.join("chat history", new_file_name + ".json")
+
         # Check if a file with the same name already exists 
         if os.path.isfile(file_path):
             # Display error message when file with same name already exists
@@ -411,23 +354,18 @@ def app():
                 with open(file_path, "w") as f:
                     json.dump([], f)
                 
+                # Refresh the list of available chat history files
+                chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
+                
                 # Show success message with file path if file was created successfully
                 st.success(f"Chat history file {new_file_name} created successfully at {file_path}!")
                 
-
-
+                # Set newly created file as selected file and initialize an empty array to hold chat history
+                selected_file = new_file_name + ".json"
+                chat_history_list = []
             except (IOError, ValueError) as e:
                 # Display error message if an exception is thrown while creating the file
                 st.error(f"Error occurred: {str(e)}")
-
-            # Update the list of available chat history files
-            chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
-        
-            # Set newly created file as selected file and initialize an empty array to hold chat history
-            selected_file = new_file_name + ".json"
-            chat_history_list = []
-
-                    
     if delete_history_button:
             # Delete all chat history files
             try:
@@ -441,7 +379,6 @@ def app():
 
             # Refresh the list of chat history files
             chat_history_files = [f for f in os.listdir("chat history") if f.endswith('.json')]
-  
     if submit_button:
         try:
             # Get user input and add it to chat history list
@@ -465,9 +402,6 @@ def app():
             # Handle exceptions gracefully by displaying an error message
             error_msg = f"Error occurred: {str(e)}"
             chat_history_list.append(('error', error_msg))
-
-        # Clear user input placeholder
-        user_input = ""
 
         # Display chat history
         conversation_html = "<div class='chat-wrapper'>"

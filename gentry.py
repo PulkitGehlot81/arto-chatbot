@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 import numpy as np
+from tensorflow.keras.models import Model
 
 from collections import Counter
 import os
@@ -279,7 +280,7 @@ batch_size = 96
 steps = 25501
 
 # ops for projecting outputs
-outputs_proj = [tf.matmul(outputs[i], output_projection[0]) + output_projection[1] for i in range(output_seq_len)]
+#outputs_proj = [tf.matmul(outputs[i], output_projection[0]) + output_projection[1] for i in range(output_seq_len)]
 
 # training op
 optimizer = tf.keras.optimizers.legacy.RMSprop(learning_rate).minimize(loss)
@@ -331,7 +332,7 @@ def generateReply(humanMsg):
         # same format as in model building
         encoder_inputs = [tf.keras.Input(dtype = tf.int32, shape = [None], 
                                          name = 'encoder{}'.format(i)) for i in range(input_seq_len)]
-        decoder_inputs = [tf.placeholder(dtype = tf.int32, shape = [None], 
+        decoder_inputs = [tf.keras.Input(dtype = tf.int32, shape = [None], 
                                          name = 'decoder{}'.format(i)) for i in range(output_seq_len)]
 
         # output projection

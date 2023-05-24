@@ -16,7 +16,6 @@ import streamlit_theme as stt
 import glob
 import shutil
 import requests
-from bs4 import BeautifulSoup
 
 # Open the 'intents.json' file and load its content into a variable called 'data'
 with open("intents.json") as file:
@@ -85,28 +84,7 @@ def bag_of_words(s, words):
     return numpy.array(bag)
 
 
-def fetch_google_answer(query):
-    url = f"https://www.google.com/search?q={query}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-    }
 
-    # Send a GET request to the Google search URL with appropriate headers
-    response = requests.get(url, headers=headers)
-
-    # Parse the HTML response using BeautifulSoup
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    # Find the answer element in the HTML
-    answer_element = soup.find('div', class_='BNeawe iBp4i AP7Wnd')
-
-    if answer_element:
-        # Extract the answer text
-        answer = answer_element.get_text()
-        return answer
-    else:
-        # If no answer element found, return None
-        return None
 
 def words_to_list(s):
     a = []
@@ -168,12 +146,7 @@ def get_response(msg):
                     ms = random.choice(responses)
                     return ms
         else:
-            answer = fetch_google_answer(inp)
-            if answer:
-                return answer
-            else:
-                return "I'm sorry, I couldn't find an answer for your query."
-
+            return "I'm sorry, I couldn't find an answer for your query."
 
 def evaluate_model(model, words, labels, test_data):
     correct = 0
@@ -191,21 +164,6 @@ def evaluate_model(model, words, labels, test_data):
 from sklearn.model_selection import train_test_split
 train_data, test_data = train_test_split(data["intents"], test_size=0.2, random_state=42)
 
-# Preprocess the training and testing data
-train_X = []
-train_y = []
-for intent in train_data:
-    for pattern in intent["patterns"]:
-        train_X.append(pattern)
-        train_y.append(intent["tag"])
-
-test_X = []
-test_y = []
-for intent in test_data:
-    for pattern in intent["patterns"]:
-        test_X.append(pattern)
-        test_y.append(intent["tag"])
-
 
 # Train a new model with the training data
 try:
@@ -215,13 +173,6 @@ except:
     history = model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.save("model.tflearn")
 
-# Convert the training and testing data into a list of tuples (pattern, tag)
-train_data = list(zip(train_X, train_y))
-test_data = list(zip(test_X, test_y))
-
-# Evaluate the model using the testing data
-accuracy = evaluate_model(model, words, labels, test_data)
-print(f"Accuracy: {accuracy * 100}%")
 
 def app():
     st.set_page_config(
