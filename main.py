@@ -156,7 +156,7 @@ def evaluate_model(model, words, labels, test_data):
         predicted = numpy.argmax(model.predict([input_data]))
         if labels[predicted] == tag:
             correct += 1
-    accuracy = correct / total
+    accuracy = correct/total
     return accuracy
 
 
